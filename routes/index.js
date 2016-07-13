@@ -6,10 +6,21 @@ var passport = require('passport');
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express', user: req.user });
 });
+router.get('/hello', function(req, res, next) {
+  res.render('hello', { title: 'Express', user: req.user });
+});
 
 router.post('/login',
   passport.authenticate('local', { successRedirect: '/',
                                    failureRedirect: '/' })
 );
+
+
+router.get('/auth/github', passport.authenticate('github', { scope: [ 'user:email' ] }));
+
+router.get('/auth/github/callback', passport.authenticate('github', { failureRedirect: '/login' }), function(req, res) {
+  // Successful authentication, redirect home.
+  res.redirect('/hello');
+});
 
 module.exports = router;
