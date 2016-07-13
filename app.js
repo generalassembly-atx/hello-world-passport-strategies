@@ -7,10 +7,12 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 
 var passport = require('passport');
+var GitHubStrategy = require('passport-github').Strategy;
 var LocalStrategy = require('passport-local').Strategy;
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
+require('dotenv').config();
 
 var app = express();
 
@@ -39,12 +41,23 @@ passport.use(new LocalStrategy(
     return done(null, username);
   }
 ));
+passport.use(new GitHubStrategy({
+    clientID: process.env.GITHUB_CLIENT_ID,
+    clientSecret: process.env.GITHUB_CLIENT_SECRET,
+    callbackURL: "http://127.0.0.1:3000/auth/github/callback"
+  },
+  function(accessToken, refreshToken, profile, cb) {
+       return cb(null, profile);
+   }
+));
+
 passport.serializeUser(function(username, done) {
   done(null, username);
 });
 passport.deserializeUser(function(username, done) {
   done(null, username);
 });
+
 
 app.use('/', routes);
 app.use('/users', users);
