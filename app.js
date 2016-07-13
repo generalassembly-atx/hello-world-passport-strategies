@@ -5,6 +5,9 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
+var GitHubStrategy = require('passport-github').Strategy;
+require('dotenv').config();
+
 
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
@@ -25,6 +28,21 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+
+//no clue but something about oauth
+passport.use(new GitHubStrategy({
+    clientID:process.env.GH_ClIENT_ID,
+    clientSecret:process.env.GH_ClIENT_SECRET,
+    callbackURL: "http://127.0.0.1:3000/auth/github/callback"
+  },
+  function(accessToken, refreshToken, profile, cb) {
+      return cb(null, profile);
+  }
+));
+
+
+
 
 // PASSPORT SECTION
 app.use(session({
