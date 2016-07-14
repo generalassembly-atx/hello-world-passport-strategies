@@ -5,9 +5,11 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
+var dotenv = require('dotenv').config();
 
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
+var GitHubStrategy = require('passport-github2').Strategy;
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -37,6 +39,15 @@ app.use(passport.session());
 passport.use(new LocalStrategy(
   function(username, password, done) {
     return done(null, username);
+  }
+));
+passport.use(new GitHubStrategy({
+    clientID: process.env.GITHUB_CLIENT_ID,
+    clientSecret: process.env.GITHUB_CLIENT_SECRET,
+    callbackURL: "http://127.0.0.1:3000/auth/github/callback"
+  },
+  function(accessToken, refreshToken, profile, done) {
+    done(null, profile);
   }
 ));
 passport.serializeUser(function(username, done) {
