@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -8,7 +10,19 @@ var session = require('express-session');
 
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
+var GitHubStrategy = require('passport-github').Strategy;
 
+passport.use(new GitHubStrategy({
+    clientID: process.env.GH_CLIENT_ID,
+    clientSecret: process.env.GH_CLIENT_CLIENTSECRET,
+    callbackURL: "http://localhost:3000/auth/github/callback"
+  },
+ function(accessToken, refreshToken, profile, cb) {
+  // User.findOrCreate({ githubId: profile.id }, function (err, user) {
+    return cb(null, profile);
+
+ }
+));
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
