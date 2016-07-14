@@ -47,7 +47,7 @@ passport.use(new GitHubStrategy({
     callbackURL: "http://127.0.0.1:3000/auth/github/callback"
   },
   function(accessToken, refreshToken, profile, done) {
-    cb(null, profile);
+    done(null, profile);
   }
 ));
 passport.serializeUser(function(username, done) {
