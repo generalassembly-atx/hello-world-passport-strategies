@@ -12,4 +12,13 @@ router.post('/login',
                                    failureRedirect: '/' })
 );
 
+router.get('/auth/twitchtv', passport.authenticate('twitchtv'));
+
+router.get('/auth/twitchtv/callback', 
+  passport.authenticate('twitchtv', { failureRedirect: '/login' }),
+  function(req, res) {
+    // Successful authentication, redirect home.
+    res.redirect('/');
+  }
+);
 module.exports = router;

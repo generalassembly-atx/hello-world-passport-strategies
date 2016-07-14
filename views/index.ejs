@@ -1,17 +1,19 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= title %></title>
+    <title>TWITCH</title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
   </head>
   <body>
-    <h1><%= title %></h1>
+    <h1>TWITCH.TV LOGGER INNER</h1>
+
+    <h2>BDC BABY</h2>
 
     <% if (user){ %>
-      <p>Welcome, <%= user %>!</p>
+      <p>Thank you so much, <%= user %>! Welcome to the BDC</p>
     <% } %>
-
-    <p>GitHub Login</p>
+    <a href="/auth/twitchtv"><p>TWITCH Login</p></a>
+    
 
     <form action="/login" method="post">
       <div>

@@ -8,6 +8,8 @@ var session = require('express-session');
 
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
+var twitchStuff = require('passport-twitchtv').Strategy;
+require('dotenv').config();
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -45,6 +47,19 @@ passport.serializeUser(function(username, done) {
 passport.deserializeUser(function(username, done) {
   done(null, username);
 });
+
+passport.use(new twitchStuff({
+    clientID: process.env.TWITCHTV_CLIENT_ID,
+    clientSecret: process.env.TWITCHTV_SECRET_ID,
+    callbackURL: "http://127.0.0.1:3000/auth/twitchtv/callback",
+    scope: "user_read"
+  },
+  function(accessToken, refreshToken, profile, done) {
+    User.findOrCreate({ twitchtvId: profile.id }, function (err, user) {
+      return done(err, user);
+    });
+  }
+));
 
 app.use('/', routes);
 app.use('/users', users);
