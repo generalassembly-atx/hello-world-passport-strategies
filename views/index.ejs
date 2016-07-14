@@ -8,10 +8,10 @@
     <h1><%= title %></h1>
 
     <% if (user){ %>
-      <p>Welcome, <%= user %>!</p>
+      <p>Welcome, <%= user.username %>!</p>
     <% } %>
 
-    <p>GitHub Login</p>
+    <a href="/auth/github/callback" ><p>GitHub Login</p></a>
 
     <form action="/login" method="post">
       <div>

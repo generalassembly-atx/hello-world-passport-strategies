@@ -8,6 +8,7 @@ var session = require('express-session');
 
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
+var GitHubStrategy = require('passport-github').Strategy;
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -39,6 +40,17 @@ passport.use(new LocalStrategy(
     return done(null, username);
   }
 ));
+
+passport.use(new GitHubStrategy({
+    clientID: "0a6b25c8401463e38df5",
+    clientSecret: "899b0ef8f4d9584124428614e3c238bc3e332777",
+    callbackURL: "http://localhost:3000/auth/github/callback"
+  },
+  function(accessToken, refreshToken, profile, cb) {
+      return cb(null, profile)
+    }
+));
+
 passport.serializeUser(function(username, done) {
   done(null, username);
 });
@@ -57,6 +69,7 @@ app.use(function(req, res, next) {
 });
 
 // error handlers
+
 
 // development error handler
 // will print stacktrace
