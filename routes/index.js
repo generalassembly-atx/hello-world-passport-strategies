@@ -12,4 +12,18 @@ router.post('/login',
                                    failureRedirect: '/' })
 );
 
+router.get('/auth/github',
+  passport.authenticate('github', { scope: [ 'user:email' ] }));
+
+router.get('/auth/github/callback',
+  passport.authenticate('github', { failureRedirect: '/login' }),
+  function(req, res) {
+    // Successful authentication, redirect home.
+    res.redirect('/');
+  });
+
+router.get('/hello', function(req, res, next){
+  res.send(req.user);
+});
+
 module.exports = router;
